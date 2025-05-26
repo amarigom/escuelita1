@@ -75,7 +75,7 @@ for dni_input_value in dni_list:
     print(f"🔍 Buscando DNI: {dni_input_value}")
     try:
         dni_input = wait.until(EC.presence_of_element_located((By.ID,"name")))
-        #dni_input.clear()
+        dni_input.clear()
         dni_input.send_keys(dni_input_value)
         driver.find_element(By.ID, "buttonSubmit").click()
 
@@ -88,7 +88,7 @@ for dni_input_value in dni_list:
                 resultados.append(datos)
 
     except Exception as e:
-        print(f"❌ Error con DNI {dni_input_value}: {e}")
+        print(f"Se presenta ERROR con DNI {dni_input_value}: {e}")
 
 driver.quit()
 
