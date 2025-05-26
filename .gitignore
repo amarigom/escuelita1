@@ -1,1 +1,24 @@
+# Entornos virtuales de Python
+venv/
+.env
+
+# Archivos de credenciales sensibles
 credenciales.json
+
+# Archivos de resultados generados automáticamente
+resultados_docentes.csv
+
+# Archivos de Python compilados
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Archivos temporales de sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos de logs
+*.log
+
+# Archivos de configuración de VSCode (opcional)
+.vscode/
