@@ -1,2 +1,6 @@
+pandas
+gspread
+gspread-dataframe
+oauth2client
 selenium
-python
+webdriver-manager

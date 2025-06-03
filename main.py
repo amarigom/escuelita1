@@ -1,30 +1,28 @@
-
 import pandas as pd
 import gspread
 from gspread_dataframe import set_with_dataframe
 from oauth2client.service_account import ServiceAccountCredentials
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 import time
 
 # ---------------- GOOGLE SHEETS ----------------
 
-# Autenticación con Google Sheets
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-creds = ServiceAccountCredentials.from_json_keyfile_name("credenciales.json", scope)  # tu archivo de credenciales
+creds = ServiceAccountCredentials.from_json_keyfile_name("credenciales.json", scope)
 client = gspread.authorize(creds)
 
-# Abrir la hoja de cálculo y leer datos con pandas
-spreadsheet = client.open("Docentes")  # Cambiá por el nombre real
+spreadsheet = client.open("Docentes")
 sheet = spreadsheet.sheet1
 data = sheet.get_all_records()
 df_dni = pd.DataFrame(data)
 
-# Asegurate de que haya una columna llamada "DNI"
 if "DNI" not in df_dni.columns:
     raise ValueError("❌ La hoja de cálculo debe tener una columna llamada 'DNI'")
 
@@ -32,9 +30,23 @@ dni_list = df_dni["DNI"].dropna().astype(str).tolist()
 print(dni_list)
 
 # ---------------- SELENIUM ----------------
+chrome_options = Options()
+#chrome_options.add_argument("--headless=new")  # SIN INTERFAZ GRÁFICA
+chrome_options.add_argument("--no-sandbox")
+chrome_options.add_argument("--disable-dev-shm-usage")
 
-# Inicializar Selenium
-driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+# NO AGREGUES --user-data-dir
+
+
+
+
+
+
+
+chrome_options.add_argument("--window-size=1920x1080")
+
+
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 wait = WebDriverWait(driver, 20)
 
 def extraer_datos_tarjeta(tarjeta):
@@ -68,7 +80,6 @@ def extraer_datos_tarjeta(tarjeta):
         print(f"⚠️ Error al procesar tarjeta: {e}")
         return None
 
-# Procesar todos los DNIs
 resultados = []
 driver.get("https://abc.gob.ar/listado-oficial/")
 for dni_input_value in dni_list:
@@ -92,15 +103,11 @@ for dni_input_value in dni_list:
 
 driver.quit()
 
-# ---------------- PANDAS ----------------
-
 df_resultados = pd.DataFrame(resultados)
 print(df_resultados)
 
-# Guardar a CSV local (opcional)
 df_resultados.to_csv("resultados_docentes.csv", index=False)
 
-# (Opcional) Escribir de vuelta a Google Sheets en otra hoja
 try:
     worksheet_output = spreadsheet.worksheet("Resultados")
 except gspread.exceptions.WorksheetNotFound:
@@ -108,3 +115,6 @@ except gspread.exceptions.WorksheetNotFound:
 
 worksheet_output.clear()
 set_with_dataframe(worksheet_output, df_resultados)
+
+if __name__ == "__main__":
+    print("Ejecutando el scraper correctamente desde Docker")
