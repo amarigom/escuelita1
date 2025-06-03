@@ -13,12 +13,12 @@ Este proyecto automatiza la consulta de datos docentes desde el sitio oficial de
   - En una hoja llamada `Resultados` dentro del mismo Google Sheet.
 
 ## 📂 Estructura del Proyecto
-
+```
 
 .
 ├── credenciales.json        # Claves de API de Google (NO subir a GitHub)
 ├── resultados_docentes.csv  # Archivo generado automáticamente con los resultados
-├── script.py                # Script principal de scraping
+├── main.py                # Script principal de scraping
 └── README.md                # Este archivo
 ```
 
@@ -56,7 +56,7 @@ pip install -r requirements.txt
 ## ▶️ Ejecución
 
 ```bash
-python script.py
+python main.py
 ```
 
 - El script va a buscar en la hoja de cálculo los DNIs y procesará cada uno.
