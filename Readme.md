@@ -14,7 +14,7 @@ Este proyecto automatiza la consulta de datos docentes desde el sitio oficial de
 
 ## 📂 Estructura del Proyecto
 
-```
+
 .
 ├── credenciales.json        # Claves de API de Google (NO subir a GitHub)
 ├── resultados_docentes.csv  # Archivo generado automáticamente con los resultados
